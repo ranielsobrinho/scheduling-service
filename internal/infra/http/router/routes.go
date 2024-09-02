@@ -22,10 +22,10 @@ func initializeRoutes(router *gin.Engine, dbConnection *sql.DB) {
 	// Repository
 	SchedulingRepository := repositories.NewSchedulingRepository(dbConnection)
 
-	// UseCase
+	// UseCases
 	GetSchedulingUseCase := usecases.NewGetSchedulesUseCase(SchedulingRepository)
 
-	// Controller
+	// Controllers
 	GetSchedulingController := controllers.NewGetSchedulesController(GetSchedulingUseCase)
 
 	v1 := router.Group("/api/v1")
