@@ -16,8 +16,8 @@ func NewGetSchedulesController(schedulingUseCase usecases.GetSchedulesUseCase) G
 	return GetSchedulesController{schedulingUseCase: schedulingUseCase}
 }
 
-func (getschedulesController *GetSchedulesController) GetSchedules(ctx *gin.Context) {
-	schedules, err := getschedulesController.schedulingUseCase.GetSchedules()
+func (getSchedulesController *GetSchedulesController) GetSchedules(ctx *gin.Context) {
+	schedules, err := getSchedulesController.schedulingUseCase.GetSchedules()
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
