@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/ranielsobrinho/scheduling-service-api/internal/domain/models"
 )
 
@@ -47,4 +48,25 @@ func (schedulingRepository *SchedulingRepository) GetSchedules() ([]models.Sched
 	rows.Close()
 
 	return schedulingList, nil
+}
+
+func (schedulingRepository *SchedulingRepository) CreateSchedule(schedule models.SchedulingModel) (models.SchedulingModel, error) {
+	query, err := schedulingRepository.connection.Prepare("INSERT INTO seucarlos.schedules (id, schedule_date, user_id, service) VALUES ($1, $2, $3, $4) RETURNING *")
+	if err != nil {
+		fmt.Println(err)
+		return models.SchedulingModel{}, err
+	}
+
+	var schedulingObj models.SchedulingModel
+	var id = uuid.New()
+
+	err = query.QueryRow(id, schedule.ScheduleDate, schedule.User, schedule.Service).Scan(&schedulingObj)
+	if err != nil {
+		fmt.Println(err)
+		return models.SchedulingModel{}, err
+	}
+
+	query.Close()
+
+	return schedulingObj, nil
 }
