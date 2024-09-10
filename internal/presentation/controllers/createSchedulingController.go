@@ -25,11 +25,11 @@ func (createSchedulingController *CreateSchedulingController) CreateSchedule(ctx
 		return
 	}
 
-	insertedScheduling, err := createSchedulingController.createSchedulingUseCase.CreateScheduleUseCase(schedulingModel)
+	insertedSchedulingId, err := createSchedulingController.createSchedulingUseCase.CreateScheduleUseCase(schedulingModel)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, insertedScheduling)
+	ctx.JSON(http.StatusCreated, insertedSchedulingId)
 }

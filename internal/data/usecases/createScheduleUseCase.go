@@ -13,11 +13,11 @@ func NewCreateScheduleUseCase(scheduleRepository repositories.SchedulingReposito
 	return CreateScheduleUseCase{scheduleRepository: scheduleRepository}
 }
 
-func (createScheduleUseCase *CreateScheduleUseCase) CreateScheduleUseCase(schedule models.SchedulingModel) (models.SchedulingModel, error) {
-	scheduleCreated, err := createScheduleUseCase.scheduleRepository.CreateSchedule(schedule)
+func (createScheduleUseCase *CreateScheduleUseCase) CreateScheduleUseCase(schedule models.SchedulingModel) (string, error) {
+	scheduleIdCreated, err := createScheduleUseCase.scheduleRepository.CreateSchedule(schedule)
 	if err != nil {
-		return models.SchedulingModel{}, err
+		return "", err
 	}
 
-	return scheduleCreated, nil
+	return scheduleIdCreated, nil
 }

@@ -50,23 +50,23 @@ func (schedulingRepository *SchedulingRepository) GetSchedules() ([]models.Sched
 	return schedulingList, nil
 }
 
-func (schedulingRepository *SchedulingRepository) CreateSchedule(schedule models.SchedulingModel) (models.SchedulingModel, error) {
-	query, err := schedulingRepository.connection.Prepare("INSERT INTO seucarlos.schedules (id, schedule_date, user_id, service) VALUES ($1, $2, $3, $4) RETURNING *")
+func (schedulingRepository *SchedulingRepository) CreateSchedule(schedule models.SchedulingModel) (string, error) {
+	query, err := schedulingRepository.connection.Prepare("INSERT INTO seucarlos.schedules (id, schedule_date, user_id, service) VALUES ($1, $2, $3, $4) RETURNING id")
 	if err != nil {
 		fmt.Println(err)
-		return models.SchedulingModel{}, err
+		return "", err
 	}
 
-	var schedulingObj models.SchedulingModel
+	var schedulingId string
 	var id = uuid.New()
 
-	err = query.QueryRow(id, schedule.ScheduleDate, schedule.User, schedule.Service).Scan(&schedulingObj)
+	err = query.QueryRow(id, schedule.ScheduleDate, schedule.User, schedule.Service).Scan(&schedulingId)
 	if err != nil {
 		fmt.Println(err)
-		return models.SchedulingModel{}, err
+		return "", err
 	}
 
 	query.Close()
 
-	return schedulingObj, nil
+	return schedulingId, nil
 }
