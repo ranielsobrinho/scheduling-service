@@ -32,9 +32,10 @@ func (schedulingRepository *SchedulingRepository) GetSchedules() ([]models.Sched
 	for rows.Next() {
 		err := rows.Scan(
 			&schedulingObj.Id,
+			&schedulingObj.ScheduleDate,
 			&schedulingObj.User,
 			&schedulingObj.Service,
-			&schedulingObj.ScheduleDate,
+			&schedulingObj.CreatedAt,
 		)
 
 		if err != nil {
