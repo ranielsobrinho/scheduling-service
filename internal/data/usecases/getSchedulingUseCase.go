@@ -14,5 +14,11 @@ func NewGetSchedulesUseCase(scheduleRepository repositories.SchedulingRepository
 }
 
 func (getSchedulingUseCase *GetSchedulesUseCase) GetSchedules() ([]models.SchedulingModel, error) {
-	return getSchedulingUseCase.scheduleRepository.GetSchedules()
+	schedules, err := getSchedulingUseCase.scheduleRepository.GetSchedules()
+
+	if err != nil {
+		return []models.SchedulingModel{}, err
+	}
+
+	return schedules, nil
 }
