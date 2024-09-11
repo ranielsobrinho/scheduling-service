@@ -117,3 +117,20 @@ func (schedulingRepository *SchedulingRepository) DeleteScheduleById(scheduleId 
 
 	return nil
 }
+
+func (schedulingRepository *SchedulingRepository) GetScheduleById(scheduleId string) (models.SchedulingModel, error) {
+	query, err := schedulingRepository.connection.Prepare("SELECT id, schedule_date, service, user_id, created_at FROM seucarlos.schedules WHERE id = $1")
+	if err != nil {
+		return models.SchedulingModel{}, err
+	}
+
+	var schedulingObj models.SchedulingModel
+
+	err = query.QueryRow(scheduleId).Scan(&schedulingObj.Id, &schedulingObj.ScheduleDate, &schedulingObj.Service, &schedulingObj.User, &schedulingObj.CreatedAt)
+	if err != nil {
+		return models.SchedulingModel{}, err
+	}
+
+	query.Close()
+	return schedulingObj, nil
+}
