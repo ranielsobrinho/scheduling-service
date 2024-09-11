@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +27,14 @@ func (getScheduleByIdController *GetScheduleByIdController) GetScheduleById(ctx 
 
 	schedule, err := getScheduleByIdController.getScheduleByIdUseCase.GetSchedulesById(scheduleId)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"message": "Schedule not found",
+			})
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
