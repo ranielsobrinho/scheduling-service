@@ -27,7 +27,7 @@ func (deleteScheduleByIdController *DeleteScheduleByIdController) DeleteSchedule
 	err := deleteScheduleByIdController.deleteScheduleByIdUseCase.DeleteScheduleById(scheduleId)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 

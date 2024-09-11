@@ -29,7 +29,7 @@ func (getSchedulesByUserIdController *GetSchedulesByUserIdController) GetSchedul
 	schedules, err := getSchedulesByUserIdController.getSchedulesByUserIdUseCase.GetSchedulesByUserId(userIdNumber)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
