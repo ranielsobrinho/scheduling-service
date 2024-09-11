@@ -26,16 +26,19 @@ func initializeRoutes(router *gin.Engine, dbConnection *sql.DB) {
 	GetSchedulingUseCase := usecases.NewGetSchedulesUseCase(SchedulingRepository)
 	CreateSchedulingUseCase := usecases.NewCreateScheduleUseCase(SchedulingRepository)
 	GetSchedulesByUserIdUseCase := usecases.NewGetSchedulesByUserIdUseCase(SchedulingRepository)
+	DeleteScheduleByIdUseCase := usecases.NewDeleteScheduleByIdUseCase(SchedulingRepository)
 
 	// Controllers
 	GetSchedulingController := controllers.NewGetSchedulesController(GetSchedulingUseCase)
 	CreateSchedulingController := controllers.NewCreateSchedulingController(CreateSchedulingUseCase)
 	GetSchedulesByUserIdController := controllers.NewGetSchedulesByUserIdController(GetSchedulesByUserIdUseCase)
+	DeleteScheduleByIdController := controllers.NewDeleteScheduleByIdController(DeleteScheduleByIdUseCase)
 
 	v1 := router.Group("/api/v1")
 	{
 		v1.GET("/schedules", GetSchedulingController.GetSchedules)
 		v1.POST("/schedules", CreateSchedulingController.CreateSchedule)
 		v1.GET("/schedules/:userId", GetSchedulesByUserIdController.GetSchedulesByUserId)
+		v1.DELETE("/schedules/:scheduleId", DeleteScheduleByIdController.DeleteScheduleById)
 	}
 }
