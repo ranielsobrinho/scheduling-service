@@ -17,7 +17,6 @@ func NewSchedulingRepository(connection *sql.DB) SchedulingRepository {
 }
 
 func (schedulingRepository *SchedulingRepository) GetSchedules() ([]models.SchedulingModel, error) {
-	fmt.Println("Foi chamado aqui oia")
 	query := "SELECT * FROM seucarlos.schedules"
 
 	rows, err := schedulingRepository.connection.Query(query)
