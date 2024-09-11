@@ -103,3 +103,17 @@ func (schedulingRepository *SchedulingRepository) GetSchedulesByUserId(userId in
 
 	return schedulingList, nil
 }
+
+func (schedulingRepository *SchedulingRepository) DeleteScheduleById(scheduleId string) error {
+	query, err := schedulingRepository.connection.Prepare("DELETE FROM seucarlos.schedules WHERE id = $1")
+
+	if err != nil {
+		return err
+	}
+
+	query.QueryRow(scheduleId)
+
+	query.Close()
+
+	return nil
+}
