@@ -134,3 +134,19 @@ func (schedulingRepository *SchedulingRepository) GetScheduleById(scheduleId str
 	query.Close()
 	return schedulingObj, nil
 }
+
+func (SchedulingRepository *SchedulingRepository) UpdateScheduleById(scheduleId string, schedule models.SchedulingModel) (models.SchedulingModel, error) {
+	query, err := SchedulingRepository.connection.Prepare("UPDATE seucarlos.schedules SET schedule_date = $1, service = $2 WHERE id = $3")
+	if err != nil {
+		return models.SchedulingModel{}, err
+	}
+
+	var schedulingObj models.SchedulingModel
+
+	err = query.QueryRow(schedule.ScheduleDate, schedule.Service, scheduleId).Scan(&schedulingObj.Id, &schedulingObj.ScheduleDate, &schedulingObj.Service, &schedulingObj.User, &schedulingObj.CreatedAt)
+	if err != nil {
+		return models.SchedulingModel{}, err
+	}
+	query.Close()
+	return schedulingObj, nil
+}
