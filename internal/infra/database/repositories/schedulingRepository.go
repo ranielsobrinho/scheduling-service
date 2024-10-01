@@ -136,7 +136,7 @@ func (schedulingRepository *SchedulingRepository) GetScheduleById(scheduleId str
 }
 
 func (SchedulingRepository *SchedulingRepository) UpdateScheduleById(scheduleId string, schedule models.SchedulingModel) (models.SchedulingModel, error) {
-	query, err := SchedulingRepository.connection.Prepare("UPDATE seucarlos.schedules SET schedule_date = $1, service = $2 WHERE id = $3")
+	query, err := SchedulingRepository.connection.Prepare("UPDATE seucarlos.schedules SET schedule_date = $1, service = $2 WHERE id = $3 RETURNING id, schedule_date, service, user_id, created_at")
 	if err != nil {
 		return models.SchedulingModel{}, err
 	}
@@ -147,6 +147,7 @@ func (SchedulingRepository *SchedulingRepository) UpdateScheduleById(scheduleId 
 	if err != nil {
 		return models.SchedulingModel{}, err
 	}
+
 	query.Close()
 	return schedulingObj, nil
 }
