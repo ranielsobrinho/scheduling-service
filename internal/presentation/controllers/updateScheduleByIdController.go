@@ -18,6 +18,13 @@ func NewUpdateScheduleByIdController(updateScheduleByIdUseCase usecases.UpdateSc
 
 func (updateScheduleByIdController *UpdateScheduleByIdController) UpdateScheduleById(ctx *gin.Context) {
 	scheduleId := ctx.Param("scheduleId")
+
+	if scheduleId == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "Schedule id cannot be null",
+		})
+	}
+
 	var scheduleModel models.SchedulingModel
 	err := ctx.BindJSON(&scheduleModel)
 
