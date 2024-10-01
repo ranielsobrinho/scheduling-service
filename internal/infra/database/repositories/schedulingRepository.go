@@ -151,3 +151,35 @@ func (SchedulingRepository *SchedulingRepository) UpdateScheduleById(scheduleId 
 	query.Close()
 	return schedulingObj, nil
 }
+
+func (schedulingRepository *SchedulingRepository) GetSchedulesByDayDate(dayDate string) ([]models.SchedulingModel, error) {
+	query := "SELECT id, schedule_date, service, user_id, created_at FROM seucarlos.schedules WHERE schedule_date = $1"
+	rows, err := schedulingRepository.connection.Query(query, dayDate)
+	if err != nil {
+		return []models.SchedulingModel{}, err
+	}
+
+	var schedulingList []models.SchedulingModel
+	var schedulingObj models.SchedulingModel
+
+	for rows.Next() {
+		err := rows.Scan(
+			&schedulingObj.Id,
+			&schedulingObj.ScheduleDate,
+			&schedulingObj.User,
+			&schedulingObj.Service,
+			&schedulingObj.CreatedAt,
+		)
+
+		if err != nil {
+			fmt.Println(err)
+			return []models.SchedulingModel{}, err
+		}
+
+		schedulingList = append(schedulingList, schedulingObj)
+	}
+
+	rows.Close()
+
+	return schedulingList, nil
+}
