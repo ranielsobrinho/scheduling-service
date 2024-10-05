@@ -30,6 +30,7 @@ func initializeRoutes(router *gin.Engine, dbConnection *sql.DB) {
 	GetScheduleByIdUseCase := usecases.NewGetScheduleByIdUseCase(SchedulingRepository)
 	UpdateScheduleByIdUseCase := usecases.NewUpdateSchedulingByIdUseCase(SchedulingRepository)
 	GetSchedulesByDayDateUseCase := usecases.NewGetSchedulesByDayDateUseCase(SchedulingRepository)
+	GetSchedulesByMonthUseCase := usecases.NewGetSchedulesByMonthUseCase(SchedulingRepository)
 
 	// Controllers
 	GetSchedulingController := controllers.NewGetSchedulesController(GetSchedulingUseCase)
@@ -39,6 +40,7 @@ func initializeRoutes(router *gin.Engine, dbConnection *sql.DB) {
 	GetScheduleByIdController := controllers.NewGetScheduleByIdController(GetScheduleByIdUseCase)
 	UpdateScheduleByIdController := controllers.NewUpdateScheduleByIdController(UpdateScheduleByIdUseCase)
 	GetSchedulesByDayDateController := controllers.NewGetSchedulesByDayDateController(GetSchedulesByDayDateUseCase)
+	GetSchedulesByMonthController := controllers.NewGetSchedulesByMonthController(GetSchedulesByMonthUseCase)
 
 	v1 := router.Group("/api/v1")
 	{
@@ -49,5 +51,6 @@ func initializeRoutes(router *gin.Engine, dbConnection *sql.DB) {
 		v1.GET("/schedule/:scheduleId", GetScheduleByIdController.GetScheduleById)
 		v1.PUT("/schedules/:scheduleId", UpdateScheduleByIdController.UpdateScheduleById)
 		v1.GET("/schedules/get-by-date/:dayDate", GetSchedulesByDayDateController.GetSchedulesByDayDate)
+		v1.GET("/schedules/get-by-month/:dayMonth", GetSchedulesByMonthController.GetSchedulesByMonth)
 	}
 }
