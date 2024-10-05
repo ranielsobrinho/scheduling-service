@@ -48,6 +48,6 @@ func initializeRoutes(router *gin.Engine, dbConnection *sql.DB) {
 		v1.DELETE("/schedules/:scheduleId", DeleteScheduleByIdController.DeleteScheduleById)
 		v1.GET("/schedule/:scheduleId", GetScheduleByIdController.GetScheduleById)
 		v1.PUT("/schedules/:scheduleId", UpdateScheduleByIdController.UpdateScheduleById)
-		v1.GET("/schedules/:dayDate", GetSchedulesByDayDateController.GetSchedulesByDayDate)
+		v1.GET("/schedules/get-by-date/:dayDate", GetSchedulesByDayDateController.GetSchedulesByDayDate)
 	}
 }

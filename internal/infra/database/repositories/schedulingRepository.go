@@ -153,8 +153,10 @@ func (SchedulingRepository *SchedulingRepository) UpdateScheduleById(scheduleId 
 }
 
 func (schedulingRepository *SchedulingRepository) GetSchedulesByDayDate(dayDate string) ([]models.SchedulingModel, error) {
-	query := "SELECT id, schedule_date, service, user_id, created_at FROM seucarlos.schedules WHERE schedule_date = $1"
-	rows, err := schedulingRepository.connection.Query(query, dayDate)
+	initialDate := dayDate + "T00:00:00"
+	endDate := dayDate + "T23:59:59"
+	query := "SELECT id, schedule_date, service, user_id, created_at FROM seucarlos.schedules WHERE schedule_date BETWEEN $1 AND $2"
+	rows, err := schedulingRepository.connection.Query(query, initialDate, endDate)
 	if err != nil {
 		return []models.SchedulingModel{}, err
 	}
@@ -166,8 +168,8 @@ func (schedulingRepository *SchedulingRepository) GetSchedulesByDayDate(dayDate 
 		err := rows.Scan(
 			&schedulingObj.Id,
 			&schedulingObj.ScheduleDate,
-			&schedulingObj.User,
 			&schedulingObj.Service,
+			&schedulingObj.User,
 			&schedulingObj.CreatedAt,
 		)
 
