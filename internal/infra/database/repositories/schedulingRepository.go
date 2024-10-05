@@ -187,9 +187,8 @@ func (schedulingRepository *SchedulingRepository) GetSchedulesByDayDate(dayDate 
 }
 
 func (schedulingRepository *SchedulingRepository) GetSchedulesByDayMonth(month string) ([]models.SchedulingModel, error) {
-	initialDate := month + "T00:00:00"
-	query := "SELECT id, schedule_date, service, user_id, created_at FROM seucarlos.schedules GROUP BY DATE_TRUNC('month', $1)"
-	rows, err := schedulingRepository.connection.Query(query, initialDate)
+	query := "SELECT id, schedule_date, service, user_id, created_at FROM seucarlos.schedules WHERE EXTRACT(MONTH FROM schedule_date) = $1"
+	rows, err := schedulingRepository.connection.Query(query, month)
 	if err != nil {
 		return []models.SchedulingModel{}, err
 	}
