@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	db "github.com/ranielsobrinho/scheduling-service-api/internal/infra/database/helpers"
+	"os"
 )
 
 func Initialize() {
@@ -15,5 +16,5 @@ func Initialize() {
 
 	initializeRoutes(server, dbConnection)
 
-	server.Run(":5050")
+	server.Run(":" + os.Getenv("PORT"))
 }
