@@ -7,10 +7,7 @@ import (
 
 func main() {
 	// Load .env file
-	err := godotenv.Load()
-	if err != nil {
-		panic(".env file couldn't be loaded")
-	}
+	godotenv.Load()
 
 	// Init Router
 	router.Initialize()
