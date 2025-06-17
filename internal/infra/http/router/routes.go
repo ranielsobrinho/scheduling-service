@@ -44,13 +44,13 @@ func initializeRoutes(router *gin.Engine, dbConnection *sql.DB) {
 
 	v1 := router.Group("/api/v1")
 	{
-		v1.GET("/schedules", GetSchedulingController.GetSchedules)
-		v1.POST("/schedules", CreateSchedulingController.CreateSchedule)
-		v1.GET("/schedules/:userId", GetSchedulesByUserIdController.GetSchedulesByUserId)
-		v1.DELETE("/schedules/:scheduleId", DeleteScheduleByIdController.DeleteScheduleById)
-		v1.GET("/schedule/:scheduleId", GetScheduleByIdController.GetScheduleById)
-		v1.PUT("/schedules/:scheduleId", UpdateScheduleByIdController.UpdateScheduleById)
-		v1.GET("/schedules/get-by-date/:dayDate", GetSchedulesByDayDateController.GetSchedulesByDayDate)
-		v1.GET("/schedules/get-by-month/:dayMonth", GetSchedulesByMonthController.GetSchedulesByMonth)
+		v1.GET("/schedules", AuthMiddleware(), GetSchedulingController.GetSchedules)
+		v1.POST("/schedules", AuthMiddleware(), CreateSchedulingController.CreateSchedule)
+		v1.GET("/schedules/:userId", AuthMiddleware(), GetSchedulesByUserIdController.GetSchedulesByUserId)
+		v1.DELETE("/schedules/:scheduleId", AuthMiddleware(), DeleteScheduleByIdController.DeleteScheduleById)
+		v1.GET("/schedule/:scheduleId", AuthMiddleware(), GetScheduleByIdController.GetScheduleById)
+		v1.PUT("/schedules/:scheduleId", AuthMiddleware(), UpdateScheduleByIdController.UpdateScheduleById)
+		v1.GET("/schedules/get-by-date/:dayDate", AuthMiddleware(), GetSchedulesByDayDateController.GetSchedulesByDayDate)
+		v1.GET("/schedules/get-by-month/:dayMonth", AuthMiddleware(), GetSchedulesByMonthController.GetSchedulesByMonth)
 	}
 }
