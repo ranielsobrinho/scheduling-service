@@ -17,7 +17,7 @@ func NewSchedulingRepository(connection *sql.DB) SchedulingRepository {
 }
 
 func (schedulingRepository *SchedulingRepository) GetSchedules() ([]models.SchedulingModel, error) {
-	query := "SELECT id, schedule_date, user_id, service, created_at FROM seucarlos.schedules"
+	query := "SELECT id, schedule_date, user_id, service, created_at FROM schedules"
 
 	rows, err := schedulingRepository.connection.Query(query)
 
@@ -52,7 +52,7 @@ func (schedulingRepository *SchedulingRepository) GetSchedules() ([]models.Sched
 }
 
 func (schedulingRepository *SchedulingRepository) CreateSchedule(schedule models.SchedulingModel) (string, error) {
-	query, err := schedulingRepository.connection.Prepare("INSERT INTO seucarlos.schedules (id, schedule_date, user_id, service) VALUES ($1, $2, $3, $4) RETURNING id")
+	query, err := schedulingRepository.connection.Prepare("INSERT INTO schedules (id, schedule_date, user_id, service) VALUES ($1, $2, $3, $4) RETURNING id")
 	if err != nil {
 		fmt.Println(err)
 		return "", err
@@ -73,7 +73,7 @@ func (schedulingRepository *SchedulingRepository) CreateSchedule(schedule models
 }
 
 func (schedulingRepository *SchedulingRepository) GetSchedulesByUserId(userId int) ([]models.SchedulingModel, error) {
-	query := "SELECT schedules.id, schedules.schedule_date, schedules.service, schedules.user_id, schedules.created_at from seucarlos.schedules WHERE user_id = $1"
+	query := "SELECT schedules.id, schedules.schedule_date, schedules.service, schedules.user_id, schedules.created_at from schedules WHERE user_id = $1"
 
 	rows, err := schedulingRepository.connection.Query(query, userId)
 	if err != nil {
@@ -105,7 +105,7 @@ func (schedulingRepository *SchedulingRepository) GetSchedulesByUserId(userId in
 }
 
 func (schedulingRepository *SchedulingRepository) DeleteScheduleById(scheduleId string) error {
-	query, err := schedulingRepository.connection.Prepare("DELETE FROM seucarlos.schedules WHERE id = $1")
+	query, err := schedulingRepository.connection.Prepare("DELETE FROM schedules WHERE id = $1")
 
 	if err != nil {
 		return err
@@ -119,7 +119,7 @@ func (schedulingRepository *SchedulingRepository) DeleteScheduleById(scheduleId 
 }
 
 func (schedulingRepository *SchedulingRepository) GetScheduleById(scheduleId string) (models.SchedulingModel, error) {
-	query, err := schedulingRepository.connection.Prepare("SELECT id, schedule_date, service, user_id, created_at FROM seucarlos.schedules WHERE id = $1")
+	query, err := schedulingRepository.connection.Prepare("SELECT id, schedule_date, service, user_id, created_at FROM schedules WHERE id = $1")
 	if err != nil {
 		return models.SchedulingModel{}, err
 	}
@@ -136,7 +136,7 @@ func (schedulingRepository *SchedulingRepository) GetScheduleById(scheduleId str
 }
 
 func (SchedulingRepository *SchedulingRepository) UpdateScheduleById(scheduleId string, schedule models.SchedulingModel) (models.SchedulingModel, error) {
-	query, err := SchedulingRepository.connection.Prepare("UPDATE seucarlos.schedules SET schedule_date = $1, service = $2 WHERE id = $3 RETURNING id, schedule_date, service, user_id, created_at")
+	query, err := SchedulingRepository.connection.Prepare("UPDATE schedules SET schedule_date = $1, service = $2 WHERE id = $3 RETURNING id, schedule_date, service, user_id, created_at")
 	if err != nil {
 		return models.SchedulingModel{}, err
 	}
@@ -155,7 +155,7 @@ func (SchedulingRepository *SchedulingRepository) UpdateScheduleById(scheduleId 
 func (schedulingRepository *SchedulingRepository) GetSchedulesByDayDate(dayDate string) ([]models.SchedulingModel, error) {
 	initialDate := dayDate + "T00:00:00"
 	endDate := dayDate + "T23:59:59"
-	query := "SELECT id, schedule_date, service, user_id, created_at FROM seucarlos.schedules WHERE schedule_date BETWEEN $1 AND $2"
+	query := "SELECT id, schedule_date, service, user_id, created_at FROM schedules WHERE schedule_date BETWEEN $1 AND $2"
 	rows, err := schedulingRepository.connection.Query(query, initialDate, endDate)
 	if err != nil {
 		return []models.SchedulingModel{}, err
@@ -187,7 +187,7 @@ func (schedulingRepository *SchedulingRepository) GetSchedulesByDayDate(dayDate 
 }
 
 func (schedulingRepository *SchedulingRepository) GetSchedulesByDayMonth(month string) ([]models.SchedulingModel, error) {
-	query := "SELECT id, schedule_date, service, user_id, created_at FROM seucarlos.schedules WHERE EXTRACT(MONTH FROM schedule_date) = $1"
+	query := "SELECT id, schedule_date, service, user_id, created_at FROM schedules WHERE EXTRACT(MONTH FROM schedule_date) = $1"
 	rows, err := schedulingRepository.connection.Query(query, month)
 	if err != nil {
 		return []models.SchedulingModel{}, err
